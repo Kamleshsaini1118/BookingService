@@ -27,7 +27,9 @@ export default function Login() {
     setLoading(true);
     
     try {
-      const { data } = await api.post("/auth/login", formData);
+      // const { data } = await api.post("/auth/login", formData);
+      const { data } = await axios.post("https://bookingservice-1-csg6.onrender.com/auth/login", formData);
+      // const { data } = await axios.post("http://localhost:7418/auth/login", formData);
       
       // Store tokens and user data
       localStorage.setItem("accessToken", data.data.accessToken);
