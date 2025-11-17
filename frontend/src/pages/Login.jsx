@@ -53,7 +53,7 @@ export default function Login() {
         axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
         
         toast.success("Login successful!");
-        navigate("/dashboard");
+        navigate("/");
       } else {
         throw new Error('Invalid response format from server');
       }
