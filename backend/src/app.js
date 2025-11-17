@@ -17,7 +17,7 @@ app.use(urlencoded({
 // cors configuration
 app.use(cors({
     origin: process.env.CORS_ORIGIN?.split(",") || "https://booking-service-navy.vercel.app/",
-    Credentials: true,
+    credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE","OPTIONS"],
     allowedHeaders: ["Content-type", "Authorization"]
 }))
