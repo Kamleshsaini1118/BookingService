@@ -1,19 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Navbar() {
-  const token = localStorage.getItem("token");
+
+  // store token in state (important)
+  const [token, setToken] = useState(localStorage.getItem("accessToken"));
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
+  // update token state when localStorage changes (optional but best)
+
+  useEffect(() => {
+    const checkToken = () => {
+      const newToken = localStorage.getItem("accessToken");
+      setToken(newToken);
+    };
+
+    // Listen for both custom event and storage changes
+    window.addEventListener("tokenChanged", checkToken);
+    window.addEventListener("storage", checkToken);
+
+    // Initial check
+    checkToken();
+
+    return () => {
+      window.removeEventListener("tokenChanged", checkToken);
+      window.removeEventListener("storage", checkToken);
+    };
+  }, []); 
+
+
+  // logout function
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:7418/auth/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+          withCredentials: true,
+        }
+      );
+    } catch (error) {
+      console.log("Logout error:", error);
+    }
+
+    // remove token & update state
+    localStorage.removeItem("accessToken");
+    setToken(null);
     window.location.href = "/login";
   };
 
   return (
-    <nav className="bg-white shadow-md  top-0 left-0 w-full z-50">
+    <nav className="bg-white shadow-md top-0 left-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        
+
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-blue-600">
           BookingApp
@@ -21,24 +64,31 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6 text-gray-700 font-medium">
-          <Link to="/service" className="hover:text-blue-600">Services</Link>
+          <Link to="/service" className="hover:text-blue-600">
+            Services
+          </Link>
 
           {token ? (
             <>
               <Link to="/my-bookings" className="hover:text-blue-600">
                 My Bookings
               </Link>
+
               <button
                 onClick={handleLogout}
-                className="text-red-500 hover:text-red-600"
+                className="text-red-500 cursor-pointer hover:text-red-600"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="hover:text-blue-600">Login</Link>
-              <Link to="/register" className="hover:text-blue-600">Register</Link>
+              <Link to="/login" className="hover:text-blue-600">
+                Login
+              </Link>
+              <Link to="/register" className="hover:text-blue-600">
+                Register
+              </Link>
             </>
           )}
         </div>

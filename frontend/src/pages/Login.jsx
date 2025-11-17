@@ -47,6 +47,8 @@ export default function Login() {
         localStorage.setItem("refreshToken", refreshToken);
         localStorage.setItem("user", JSON.stringify(user));
         
+        window.dispatchEvent(new Event("tokenChanged"));
+        
         // Set default auth header for subsequent requests
         axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
         
