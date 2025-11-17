@@ -18,7 +18,7 @@ const MyBooking = () => {
       }
 
       try {
-        const res = await axios.get('http://localhost:7418/booking/me', {
+        const res = await axios.get('https://bookingservice-1-csg6.onrender.com/booking/me', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ const MyBooking = () => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
       try {
         const token = localStorage.getItem('accessToken');
-        await axios.delete(`http://localhost:7418/booking/${bookingId}`, {
+        await axios.delete(`https://bookingservice-1-csg6.onrender.com/booking/${bookingId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

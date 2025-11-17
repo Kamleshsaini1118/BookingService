@@ -64,7 +64,7 @@ export default function Register() {
     setLoading(true);
     
     try {
-      const { data } = await axios.post("http://localhost:7418/auth/register", {
+      const { data } = await axios.post("https://bookingservice-1-csg6.onrender.com/auth/register", {
         username: formData.username,
         email: formData.email,
         password: formData.password

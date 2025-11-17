@@ -24,9 +24,9 @@ export default function Services() {
 
    const fetchServices = async () => {
   try {
-    console.log("Fetching services from:", "http://localhost:7418/services");
+    // console.log("Fetching services from:", "http://localhost:7418/services");
 
-    const res = await axios.get("http://localhost:7418/services", {
+    const res = await axios.get("https://bookingservice-1-csg6.onrender.com/services", {
       headers: {
         'Content-Type': 'application/json',
       }
@@ -116,7 +116,7 @@ export default function Services() {
     const loadingToast = toast.loading('Processing your booking...');
     
     const res = await axios.post(
-      "http://localhost:7418/booking/create",
+      "https://bookingservice-1-csg6.onrender.com/booking/create",
       { 
         serviceId: service._id, 
         date: new Date() 
