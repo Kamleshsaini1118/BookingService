@@ -27,17 +27,31 @@ export default function Login() {
     setLoading(true);
     
     try {
-      // const { data } = await api.post("/auth/login", formData);
-      const { data } = await axios.post("https://bookingservice-1-csg6.onrender.com/auth/login", formData);
-      // const { data } = await axios.post("http://localhost:7418/auth/login", formData);
+      const response = await axios.post(
+        "https://bookingservice-1-csg6.onrender.com/api/auth/login",
+        JSON.stringify(formData),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          withCredentials: true
+        }
+      );
       
-      // Store tokens and user data
-      localStorage.setItem("accessToken", data.data.accessToken);
-      localStorage.setItem("refreshToken", data.data.refreshToken);
-      localStorage.setItem("user", JSON.stringify(data.data.user));
+      const { data } = response;
       
-      toast.success("Login successful!");
-      navigate("/dashboard");
+      if (data && data.data) {
+        // Store tokens and user data
+        localStorage.setItem("accessToken", data.data.accessToken);
+        localStorage.setItem("refreshToken", data.data.refreshToken);
+        localStorage.setItem("user", JSON.stringify(data.data.user));
+        
+        toast.success("Login successful!");
+        navigate("/dashboard");
+      } else {
+        throw new Error("Invalid response format from server");
+      }
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Login failed. Please try again.";
       toast.error(errorMessage);
