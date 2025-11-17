@@ -15,28 +15,36 @@ app.use(urlencoded({
 }))
 
 // CORS configuration
-const allowedOrigins = [
-    'https://bookingservice-1-csg6.onrender.com',
-    'https://booking-service-navy.vercel.app',
-    'http://localhost:5173',
-];
 
-app.use((req, res, next) => {
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.header('Access-Control-Allow-Origin', origin);
-    }
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-HTTP-Method-Override');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Expose-Headers', 'Set-Cookie');
+app.use(cors({
+    origin: process.env.CORS_ORIGIN?.split(",") || "http://localhost:5173",
+    Credential: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE","OPTIONS"],
+    allowedHeaders: ["Content-type", "Authorization"]
+}))
+
+// const allowedOrigins = [
+//     'https://booking-service-navy.vercel.app',
+//     'http://localhost:5173',
+//     'https://bookingservice-1-csg6.onrender.com'
+// ];
+
+// app.use((req, res, next) => {
+//     const origin = req.headers.origin;
+//     if (allowedOrigins.includes(origin)) {
+//         res.header('Access-Control-Allow-Origin', origin);
+//     }
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-HTTP-Method-Override');
+//     res.header('Access-Control-Allow-Credentials', 'true');
+//     res.header('Access-Control-Expose-Headers', 'Set-Cookie');
     
-    // Handle preflight
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    next();
-});
+//     // Handle preflight
+//     if (req.method === 'OPTIONS') {
+//         return res.sendStatus(200);
+//     }
+//     next();
+// });
 
 // auth routes 
 app.use("/auth", authRouter);
