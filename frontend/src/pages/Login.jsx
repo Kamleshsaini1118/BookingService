@@ -28,7 +28,7 @@ export default function Login() {
     
     try {
       const response = await axios.post(
-        "https://bookingservice-1-csg6.onrender.com/auth/login",
+        "https://bookingservice-1-csg6.onrender.com/api/auth/login",
         formData,
         {
           headers: {
