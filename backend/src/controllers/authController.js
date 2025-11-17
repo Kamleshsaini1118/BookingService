@@ -5,20 +5,55 @@ import { ApiError } from "../utils/apiError.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
-    const user = await User.findById(userId);
+    console.log('Generating tokens for user ID:', userId);
+    
+    // Verify environment variables
+    if (!process.env.ACCESS_TOKEN_SECRET || !process.env.REFRESH_TOKEN_SECRET) {
+      console.error('JWT secrets are not configured');
+      throw new Error('Server configuration error');
+    }
 
+    // Find user and validate
+    const user = await User.findById(userId);
+    if (!user) {
+      console.error('User not found with ID:', userId);
+      throw new Error('User not found');
+    }
+
+    console.log('User found, generating tokens...');
+    
+    // Generate tokens
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
 
-    user.refreshToken = refreshToken;
-    await user.save({validateBeforeSave: false});
+    console.log('Tokens generated, saving refresh token...');
 
+    if (!accessToken || !refreshToken) {
+      console.error('Failed to generate one or both tokens');
+      throw new Error('Failed to generate tokens');
+    }
+
+    // Save refresh token to user
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+
+    console.log('Tokens generated and saved successfully');
     return { accessToken, refreshToken };
+    
   } catch (error) {
+    console.error('Token generation error:', {
+      message: error.message,
+      stack: error.stack,
+      userId,
+      envVars: {
+        hasAccessTokenSecret: !!process.env.ACCESS_TOKEN_SECRET,
+        hasRefreshTokenSecret: !!process.env.REFRESH_TOKEN_SECRET
+      }
+    });
     throw new ApiError(
-        500,
-        "Something went wrong while generating tokens."
-    )
+      500,
+      error.message || 'Failed to generate tokens. Please try again.'
+    );
   }
 };
 
