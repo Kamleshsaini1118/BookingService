@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:7418",
+  baseURL: "https://bookingservice-1-csg6.onrender.com" || "http://localhost:7418",
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json"
