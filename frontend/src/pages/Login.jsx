@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FiMail, FiLock, FiArrowRight } from "react-icons/fi";
 import React from "react";
+import api from "../utils/api";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ export default function Login() {
     setLoading(true);
     
     try {
-      const { data } = await axios.post("http://localhost:7418/auth/login", formData);
+      const { data } = await api.post("/api/auth/login", formData);
       
       // Store tokens and user data
       localStorage.setItem("accessToken", data.data.accessToken);
