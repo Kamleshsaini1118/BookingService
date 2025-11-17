@@ -5,9 +5,12 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:7418",
   headers: {
     "Content-Type": "application/json",
+    "Accept": "application/json"
   },
   withCredentials: true,
-  timeout: 10000
+  timeout: 10000,
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN'
 });
 
 // Request interceptor
