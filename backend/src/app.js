@@ -16,9 +16,9 @@ app.use(urlencoded({
 
 // CORS configuration
 const allowedOrigins = [
+    'https://bookingservice-1-csg6.onrender.com',
     'https://booking-service-navy.vercel.app',
     'http://localhost:5173',
-    'https://bookingservice-1-csg6.onrender.com'
 ];
 
 app.use((req, res, next) => {
