@@ -27,17 +27,34 @@ export default function Login() {
     setLoading(true);
     
     try {
-      // const { data } = await api.post("/auth/login", formData);
-      const { data } = await axios.post("https://bookingservice-1-csg6.onrender.com/auth/login", formData);
-      // const { data } = await axios.post("http://localhost:7418/auth/login", formData);
+      const response = await axios.post(
+        "https://bookingservice-1-csg6.onrender.com/api/auth/login",
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          withCredentials: true  // This is crucial for sending/receiving cookies
+        }
+      );
       
-      // Store tokens and user data
-      localStorage.setItem("accessToken", data.data.accessToken);
-      localStorage.setItem("refreshToken", data.data.refreshToken);
-      localStorage.setItem("user", JSON.stringify(data.data.user));
-      
-      toast.success("Login successful!");
-      navigate("/dashboard");
+      if (response.data && response.data.data) {
+        const { accessToken, refreshToken, user } = response.data.data;
+        
+        // Store tokens and user data
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        localStorage.setItem("user", JSON.stringify(user));
+        
+        // Set default auth header for subsequent requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        
+        toast.success("Login successful!");
+        navigate("/dashboard");
+      } else {
+        throw new Error('Invalid response format from server');
+      }
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Login failed. Please try again.";
       toast.error(errorMessage);
