@@ -17,7 +17,7 @@ app.use(urlencoded({
 // CORS configuration
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN?.split(",") || "http://localhost:5173",
+    origin: process.env.CORS_ORIGIN?.split(",") || "https://bookingservice-1-csg6.onrender.com" || "http://localhost:5173",
     Credential: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE","OPTIONS"],
     allowedHeaders: ["Content-type", "Authorization"]
