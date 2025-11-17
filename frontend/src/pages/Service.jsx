@@ -65,37 +65,6 @@ export default function Services() {
 
   // Book a service
 
-//   const handleBook = async (service) => {
-//   const token = localStorage.getItem("accessToken");
-  
-//   if (!token) {
-//     navigate("/login");
-//     return;
-//   }
-
-//   try {
-//     const res = await axios.post(
-//       "http://localhost:7418/booking/create",
-//       { serviceId: service._id, date: new Date() },
-//       {
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'Authorization': `Bearer ${token}`
-//         }
-//       }
-//     );
-
-//     if (res.data.success) {
-//       toast.success("Booking created successfully!");
-//       // Optionally refresh bookings list
-//       // fetchBookings();
-//     }
-//   } catch (error) {
-//     console.error("Booking error:", error);
-//     toast.error(error.response?.data?.message || "Failed to create booking");
-//   }
-// };
-
   const handleBook = async (service) => {
   const token = localStorage.getItem('accessToken');
   
