@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Navbar() {
 
   // store token in state (important)
   const [token, setToken] = useState(localStorage.getItem("accessToken"));
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
 
   // update token state when localStorage changes (optional but best)
 
@@ -50,7 +54,9 @@ export default function Navbar() {
     // remove token & update state
     localStorage.removeItem("accessToken");
     setToken(null);
-    window.location.href = "/login";
+    // window.location.href = "/login";
+    navigate("/login");
+
   };
 
   return (
