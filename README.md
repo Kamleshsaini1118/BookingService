@@ -42,5 +42,5 @@ The Booking Service Application provides a seamless experience for users to:
 
 1. **Clone the repository**
    ```bash
-   git clone [your-repo-url]
+   git clone [https://github.com/Kamleshsaini1118/BookingService]
    cd Booking_Service/backend
