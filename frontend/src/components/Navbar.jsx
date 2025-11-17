@@ -34,7 +34,7 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:7418/auth/logout",
+        "https://bookingservice-1-csg6.onrender.com/auth/logout",
         {},
         {
           headers: {
