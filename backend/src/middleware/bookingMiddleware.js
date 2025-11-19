@@ -20,6 +20,12 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
     if (!user) {
       throw new ApiError(401, "Invalid access token -user not found");
     }
+
+    if (user.isBlocked) {
+      throw new ApiError(403, "Your account has been blocked by admin");
+    }
+
+
     req.user = user;
     next();
   } catch (error) {

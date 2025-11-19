@@ -3,6 +3,7 @@ import cors from "cors"
 import authRouter from "./routes/authRoutes.js"
 import serviceRouter from "./routes/serviceRoutes.js"
 import bookingRouter from "./routes/bookingRoute.js";
+import adminRouter from "./routes/adminRoutes.js";
 
 const app = express();
 
@@ -46,6 +47,9 @@ app.use("/services", serviceRouter)
 
 // protected api for booking
 app.use("/booking", bookingRouter);
+
+// admin routes
+app.use("/admin", adminRouter);
 
 // testing route
 app.get("/", (req, res) => {

@@ -8,6 +8,16 @@ export default function Navbar() {
 
   // store token in state (important)
   const [token, setToken] = useState(localStorage.getItem("accessToken"));
+
+    const [user, setUser] = useState(() => {
+    try {
+      const raw = localStorage.getItem("user");
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  });
+  
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -18,20 +28,25 @@ export default function Navbar() {
     const checkToken = () => {
       const newToken = localStorage.getItem("accessToken");
       setToken(newToken);
+
+      try {
+        const rawUser = localStorage.getItem("user");
+        setUser(rawUser ? JSON.parse(rawUser) : null);
+      } catch {
+        setUser(null);
+      }
     };
 
-    // Listen for both custom event and storage changes
     window.addEventListener("tokenChanged", checkToken);
     window.addEventListener("storage", checkToken);
 
-    // Initial check
     checkToken();
 
     return () => {
       window.removeEventListener("tokenChanged", checkToken);
       window.removeEventListener("storage", checkToken);
     };
-  }, []); 
+  }, []);
 
 
   // logout function
@@ -73,6 +88,12 @@ export default function Navbar() {
           <Link to="/service" className="hover:text-blue-600">
             Services
           </Link>
+
+          {user?.role === "admin" && (
+            <Link to="/admin/dashboard" className="hover:text-blue-600">
+              Admin Panel
+            </Link>
+          )}
 
           {token ? (
             <>
@@ -138,6 +159,16 @@ export default function Navbar() {
           >
             Services
           </Link>
+
+             {user?.role === "admin" && (
+            <Link
+              to="/admin/dashboard"
+              className="block hover:text-blue-600"
+              onClick={() => setMenuOpen(false)}
+            >
+              Admin Panel
+            </Link>
+          )}
 
           {token ? (
             <>
