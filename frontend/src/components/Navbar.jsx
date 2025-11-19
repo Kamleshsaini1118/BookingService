@@ -68,8 +68,16 @@ export default function Navbar() {
 
     // remove token & update state
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+
     setToken(null);
+    setUser(null);
     // window.location.href = "/login";
+
+    // notify other tabs/components
+    window.dispatchEvent(new Event("tokenChanged"));
+
     navigate("/login");
 
   };
@@ -89,7 +97,7 @@ export default function Navbar() {
             Services
           </Link>
 
-          {user?.role === "admin" && (
+          {token && user?.role === "admin" && (
             <Link to="/admin/dashboard" className="hover:text-blue-600">
               Admin Panel
             </Link>
@@ -160,7 +168,7 @@ export default function Navbar() {
             Services
           </Link>
 
-             {user?.role === "admin" && (
+             {token && user?.role === "admin" && (
             <Link
               to="/admin/dashboard"
               className="block hover:text-blue-600"
