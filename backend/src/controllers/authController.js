@@ -6,7 +6,7 @@ import { ApiError } from "../utils/apiError.js";
 const generateAccessAndRefreshToken = async (userId) => {
   try {
     console.log('Generating tokens for user ID:', userId);
-    
+
     // Verify environment variables
     if (!process.env.ACCESS_TOKEN_SECRET || !process.env.REFRESH_TOKEN_SECRET) {
       console.error('JWT secrets are not configured');
@@ -21,7 +21,7 @@ const generateAccessAndRefreshToken = async (userId) => {
     }
 
     console.log('User found, generating tokens...');
-    
+
     // Generate tokens
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
@@ -39,7 +39,7 @@ const generateAccessAndRefreshToken = async (userId) => {
 
     console.log('Tokens generated and saved successfully');
     return { accessToken, refreshToken };
-    
+
   } catch (error) {
     console.error('Token generation error:', {
       message: error.message,
@@ -80,21 +80,21 @@ const registerUser = asyncHandler(async (req, res) => {
     role: role || "user"
   });
 
-    const createdUser = await User.findById(user._id).select("-password -refreshToken",)
+  const createdUser = await User.findById(user._id).select("-password -refreshToken",)
 
-    if(!createdUser){
-        throw new ApiError(500, "Something went wrong while registering the user.")
-    }
+  if (!createdUser) {
+    throw new ApiError(500, "Something went wrong while registering the user.")
+  }
 
-    return res
-        .status(201)
-        .json(
-            new ApiResponse(
-                200,
-                {user: createdUser},
-                "User register successfully."
-            )
-        )
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(
+        200,
+        { user: createdUser },
+        "User register successfully."
+      )
+    )
 });
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -108,6 +108,14 @@ const loginUser = asyncHandler(async (req, res) => {
 
   if (!user) {
     throw new ApiError(400, "User does not exists");
+  }
+
+  // NEW: block login if user is blocked
+  if (user.isBlocked) {
+    throw new ApiError(
+      403,
+      "Your account has been blocked by the administrator. You no longer have access to this service. Please contact support if you think this is a mistake."
+    );
   }
 
   const isPasswordValid = await user.isPasswordCorrect(password);
@@ -145,7 +153,7 @@ const loginUser = asyncHandler(async (req, res) => {
       ),
     );
 
-    
+
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
@@ -172,7 +180,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 export {
-    registerUser,
-    loginUser,
-    logoutUser,
+  registerUser,
+  loginUser,
+  logoutUser,
 }
